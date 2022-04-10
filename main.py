@@ -1,4 +1,4 @@
-from PIL import
+from PIL import image
 import random
 
 
