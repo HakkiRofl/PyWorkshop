@@ -6,4 +6,5 @@ elif money > 42707 and money < 132407:
   tax = 25
 elif money > 132406:
   tax = 28
-print(f"The tax for {money} is {tax}%. That is {money*tax/100} dollars!")
+abc = '%.0f' % (money*tax/100)
+print(f"The tax for {money} is {tax}%. That is {abc} dollars!")
