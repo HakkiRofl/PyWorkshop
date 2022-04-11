@@ -22,10 +22,10 @@ while A:
             player_pieces.remove([6, 6])
             Status = "computer"
         elif [5, 5] in player_pieces:
-            player_pieces.remove([6, 6])
+            player_pieces.remove([5, 5])
             Status = "computer"
         elif [5, 5] in pc_pieces:
-            pc_pieces.remove([6, 6])
+            pc_pieces.remove([5, 5])
             Status = "computer"
 print(f"Stock pieces: {stock_pieces}")
 print(f"PC pieces: {pc_pieces}")
