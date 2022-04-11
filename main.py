@@ -1,2 +1,4 @@
-pi = 3.141592653589793
-print('%.5f' % pi)
+#Task 2
+number = float(input())
+count = int(input())
+print(f'%.{count}f' % (number))
