@@ -1,9 +1,30 @@
-#Which of the following examples will correctly output formatted strings?
+money = int(input())
+tax = 0
+if money < 15528:
+  tax = 15
+elif money < 42708:
+  tax = 25
+elif money > 132406:
+  tax = 28
+  nums = [n for n in range(20)]
+print(nums)
+print(nums[2:5])
+name = 'Python is not a snake'
+print(name[7:0:-1])
 
-#If a code snippet raises SyntaxError or formatting doesn't actually take place in a string, 
-#consider such an option incorrect.
-"%.4f".format(3.14159265358979)
-"{1} {1} {1}".format(1, 2, 3)
-#"{1} is a {kind}".format(kind="fruit", "grapefruit") - wrong answer
-"{city} is the capital of {country}".format(country="Portugal",
-                                            city="Lisbon")
+nums = [n * 2 for n in range(1, 21)]
+print(nums)
+print(nums[2:7])
+
+str1 = 'Python is not just a mere snake'
+print(str1[10:18])
+
+print(str1[::-1])
+print(str1[7::])
+
+new_str = str1[:]
+print(new_str)
+
+my_list = ['Java', 'Python', 'Kotlin']
+print(my_list[:2])
+print(my_list[:99999999])
