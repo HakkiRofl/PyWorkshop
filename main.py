@@ -1,30 +1,33 @@
-money = int(input())
-tax = 0
-if money < 15528:
-  tax = 15
-elif money < 42708:
-  tax = 25
-elif money > 132406:
-  tax = 28
-  nums = [n for n in range(20)]
-print(nums)
-print(nums[2:5])
-name = 'Python is not a snake'
-print(name[7:0:-1])
+import random
 
-nums = [n * 2 for n in range(1, 21)]
-print(nums)
-print(nums[2:7])
 
-str1 = 'Python is not just a mere snake'
-print(str1[10:18])
+library_pieces = [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6],
+                  [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 3], [3, 4], [3, 5], [3, 6], [4, 4], [4, 5], [4, 6], [5, 5],
+                  [5, 6], [6, 6]]
 
-print(str1[::-1])
-print(str1[7::])
-
-new_str = str1[:]
-print(new_str)
-
-my_list = ['Java', 'Python', 'Kotlin']
-print(my_list[:2])
-print(my_list[:99999999])
+player_pieces = []
+A = True
+Status = "none"
+while A:
+    random.shuffle(library_pieces)
+    stock_pieces = library_pieces[0:15]
+    pc_pieces = library_pieces[15:21]
+    player_pieces = library_pieces[21:27]
+    if [5, 5] in pc_pieces or [6, 6] in pc_pieces or [5, 5] in player_pieces or [6, 6] in player_pieces:
+        A = False
+        if [6, 6] in pc_pieces:
+            pc_pieces.remove([6, 6])
+            Status = "player"
+        elif [6, 6] in player_pieces:
+            player_pieces.remove([6, 6])
+            Status = "computer"
+        elif [5, 5] in player_pieces:
+            player_pieces.remove([6, 6])
+            Status = "computer"
+        elif [5, 5] in pc_pieces:
+            pc_pieces.remove([6, 6])
+            Status = "computer"
+print(f"Stock pieces: {stock_pieces}")
+print(f"PC pieces: {pc_pieces}")
+print(f"Player pieces: {player_pieces}")
+print(f"Status: {Status}")
