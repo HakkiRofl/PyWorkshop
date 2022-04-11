@@ -1,5 +1,2 @@
-from PIL import image
-import random
-
-
-print(random.randint(93, 632))
+pi = 3.141592653589793
+print('%.5f' % pi)
