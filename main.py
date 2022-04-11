@@ -1,3 +1,3 @@
-string = "no clouds here to spy on pets"
-a = string[::5]
-print(a[::-1])
+string = input()
+a = string.split("@")
+print(a[0])
