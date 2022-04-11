@@ -1,5 +1,3 @@
-word = input()
-if word == word[::-1]:
-  print("Yes")
-else:
-  print("No")
+string = "no clouds here to spy on pets"
+a = string[::5]
+print(a[::-1])
