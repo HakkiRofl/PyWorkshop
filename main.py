@@ -1,5 +1,3 @@
-#Task 3
-film_name = input()
-dir_name = input()
-year = input()
-print(f"{film_name} (dir.{dir_name}) come out in {year}")
+#Task 4
+word = input()
+print(f"{word} has {len(word)} letters")
