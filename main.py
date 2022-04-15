@@ -59,26 +59,44 @@ while B:
     try:
         if len(player_pieces) > 0:
             move = int(input())
-            if move == 0 :
+            if move == 0:
                 player_pieces.append(stock_pieces[0])
                 stock_pieces.remove(stock_pieces[0])
-            else:
+            elif move > 0:
                 table.append(player_pieces[move - 1])
                 player_pieces.remove(player_pieces[move - 1])
                 Status = "computer"
+            elif move < 0:
+                table = [player_pieces[-move - 1]] + table
+                player_pieces.remove(player_pieces[-move - 1])
+                Status = "computer"
         else:
             print("Status: You WIN!✔✔✔")
+            print("        🎂 🎂 🎂")
             B = False
+        if table[0][0] == table[-1][1]:
+            count = 0
+            for i in table:
+                for g in i:
+                    if g == table[0][0]:
+                        count += 1
+            if count == 8:
+                print("Game Over, 8 numbers")
+                B = False
     except ValueError:
-        ai = random.randint(0, len(pc_pieces) - 1)
+        ai = random.randint(-len(pc_pieces), len(pc_pieces) - 1)
         if len(pc_pieces) > 1:
             if ai == 0:
                 pc_pieces.append(stock_pieces[0])
                 stock_pieces.remove(stock_pieces[0])
-            else:
-                if len(stock_pieces) != 0:
+            elif ai > 0:
                     table.append(pc_pieces[ai])
                     pc_pieces.remove(pc_pieces[ai])
+                    Status = "player"
+            elif ai < 0:
+                if len(stock_pieces) != 0:
+                    table = [pc_pieces[ai]] + table
+                    pc_pieces.remove(pc_pieces[-ai - 1])
                     Status = "player"
         else:
             print("Status: Computer WIN!✔✔✔")
