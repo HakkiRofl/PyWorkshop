@@ -1,128 +1,136 @@
-from random import shuffle, randint
+import random
 
+table = []
+library_pieces = [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6],
+                  [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 3], [3, 4], [3, 5], [3, 6], [4, 4], [4, 5], [4, 6], [5, 5],
+                  [5, 6], [6, 6]]
 
-def give(full):
-    stock = full[:]
-    pgive = []
-    cgive = []
-    start = 0
-    while [5, 5] not in stock[:14] and [6, 6] not in stock[:14]:
-        shuffle(stock)
-    for double in [[6, 6], [5, 5]]:
-        if double in stock[:14]:
-            snake = [stock.pop(stock.index(double))]
-    pgive = stock[:6]
-    cgive = stock[6:13]
-    if randint(0, 1):
-        pgive, cgive = cgive, pgive
-    if len(cgive) < len(pgive):
-        start = 1
-    stock = stock[13:]
-    return stock, pgive, cgive, snake, start
-
-def game():
-    while True:
-        print('Stock pieces:', len(stock))
-        print('Computer pieces:', len(cgive))
-        if len(snake) > 7:
-            print(*snake[:3], '...', *snake[len(snake) - 3:], sep='')
-        else:
-            print(*snake, sep='')
-        print('Your pieces:')
-        for i, piece in enumerate(pgive, start=1):
-            print(i, piece)
-        if snake[0][0] == snake[-1][1] and sum(snake, []).count(snake[0][0]) == 8 and len(snake) != 1:
-            print("""Status: The game is over. It's a draw!""")
-            break
-        elif len(pgive) == 0:
-            print('Status: The game is over. You won')
-            break
-        elif len(cgive) == 0:
-            print('Status: The game is over. The computer won')
-            break
-        else:
-            turn()
-
-def player_d():
+player_pieces = []
+A = True
+Status = "none"
+start_domino = [0, 0]
+while A:
+    random.shuffle(library_pieces)
+    stock_pieces = library_pieces[0:14]
+    pc_pieces = library_pieces[14:21]
+    player_pieces = library_pieces[21:28]
+    if [5, 5] in pc_pieces or [6, 6] in pc_pieces or [5, 5] in player_pieces or [6, 6] in player_pieces:
+        A = False
+        if [6, 6] in pc_pieces:
+            pc_pieces.remove([6, 6])
+            Status = "player"
+            start_domino = [6, 6]
+        elif [6, 6] in player_pieces:
+            player_pieces.remove([6, 6])
+            Status = "computer"
+            start_domino = [6, 6]
+        elif [5, 5] in player_pieces:
+            player_pieces.remove([5, 5])
+            Status = "computer"
+            start_domino = [5, 5]
+        elif [5, 5] in pc_pieces:
+            pc_pieces.remove([5, 5])
+            Status = "computer"
+            start_domino = [5, 5]
+#print(f"Stock pieces: {stock_pieces}")
+#print(f"PC pieces: {pc_pieces}")
+#print(f"Player pieces: {player_pieces}")
+#print(f"Status: {Status}")
+print(f"\nThe {Status} makes the first move (status = '{Status}')\n")
+table.append(start_domino)
+B = True
+error = ""
+while B:
+    print("=" * 70)
+    print(f"\nStock size: {len(stock_pieces)}")
+    print(f"Computer pieces: {len(pc_pieces)} \n")
+    if len(table) < 7:
+        print(*table, "\n")
+    elif len(table) >= 7:
+        print(*table[0:3],"...", *table[-4:-1], "\n")
+    for i, domino in enumerate(player_pieces, start=1):
+        print(f"{i}:{domino}")
+    if Status == "computer":
+        print("\nStatus: Computer is about to make a move. Press Enter to continue...")
+    elif Status == "player":
+        print("\nStatus: It's your turn to make a move. Enter your command.")
+    print(error)
+    error = ""
     try:
-        num = int(input())
+        if len(player_pieces) > 0:
+            move = int(input())
+            if Status == "computer":
+                raise Exception
+            if move == 0:
+                player_pieces.append(stock_pieces[0])
+                stock_pieces.remove(stock_pieces[0])
+                Status = "computer"
+            elif move > 0 and player_pieces[move - 1][0] == table[-1][1]:
+                table.append(player_pieces[move - 1])
+                player_pieces.remove(player_pieces[move - 1])
+                Status = "computer"
+            elif move > 0 and player_pieces[move - 1][1] == table[-1][1]:
+                player_pieces[move - 1].reverse()
+                table.append(player_pieces[move - 1])
+                player_pieces.remove(player_pieces[move - 1])
+                Status = "computer"
+            elif move < 0 and player_pieces[-move - 1][1] == table[0][0]:
+                table = [player_pieces[-move - 1]] + table
+                player_pieces.remove(player_pieces[-move - 1])
+                Status = "computer"
+            elif move < 0 and player_pieces[-move - 1][0] == table[0][0]:
+                player_pieces[-move - 1].reverse()
+                table = [player_pieces[-move - 1]] + table
+                player_pieces.remove(player_pieces[-move - 1])
+                Status = "computer"
+            else:
+                raise TypeError
+        elif len(player_pieces) == 0:
+            print("Status: You WIN!✔✔✔")
+            print("        🎂 🎂 🎂")
+            B = False
+        if table[0][0] == table[-1][1]:
+            count = 0
+            for i in table:
+                for g in i:
+                    if g == table[0][0]:
+                        count += 1
+            if count == 8:
+                print("Game Over, 8 numbers")
+                B = False
     except ValueError:
-        print('Invalid input. Please try again.')
-        player_d()
-    else:
-        if num > 0:
-            if num > len(pgive):
-                print('No piece. Please try again.')
-                player_d()
-            else:
-                if pgive[num - 1][0] == snake[-1][1]:
-                    snake.append(pgive.pop(num - 1))
-                elif pgive[num - 1][1] == snake[-1][1]:
-                    pgive[num - 1][0], pgive[num - 1][1] = pgive[num - 1][1], pgive[num - 1][0]
-                    snake.append(pgive.pop(num - 1))
+        if len(pc_pieces) > 0:
+            for i in pc_pieces:
+                print(table[-1])
+                if i[0] == table[-1][1]:
+                        table += i
+                        pc_pieces.remove(i)
+                        Status = "player"
+                elif i[1] == table[-1][1]:
+                        i.reverse()
+                        table += i
+                        pc_pieces.remove(i)
+                        Status = "player"
+                elif i[1] == table[0][0]:
+                        table = i + table
+                        pc_pieces.remove(i)
+                        Status = "player"
+                elif i[0] == table[0][0]:
+                        i.reverse()
+                        table = i + table
+                        pc_pieces.remove(i)
+                        Status = "player"
                 else:
-                    print("""You can't put this piece in snake. Try again""")
-                    player_d()
-        elif num == 0:
-            pgive.append(stock.pop())
+                    if len(stock_pieces) != 0:
+                        pc_pieces.append(stock_pieces[0])
+                        stock_pieces.remove(stock_pieces[0])
+                        Status = "player"
         else:
-            num = abs(num)
-            if num > len(pgive):
-                print('No piece. Please try again.')
-                player_d()
-            else:
-                if pgive[num - 1][1] == snake[0][0]:
-                    snake.insert(0, pgive.pop(num - 1))
-                elif pgive[num - 1][0] == snake[0][0]:
-                    pgive[num - 1][0], pgive[num - 1][1] = pgive[num - 1][1], pgive[num - 1][0]
-                    snake.insert(0, pgive.pop(num - 1))
-                else:
-                    print("""You can't put this piece in snake. Try again""")
-                    player_d()
-
-def computer_d():
-    enter = input()
-    if enter != '':
-        print('Invalid input. Please try again.')
-        computer_d()
-    else:
-        flag = False
-        for i in range(len(cgive)):
-            if snake[-1][1] == cgive[i][0]:
-                snake.append(cgive.pop(i))
-                flag = True
-                break
-            elif snake[-1][1] == cgive[i][1]:
-                cgive[i][0], cgive[i][1] = cgive[i][1], cgive[i][0]
-                snake.append(cgive.pop(i))
-                flag = True
-                break
-        if not flag:
-            flag2 = False
-            for i in range(len(cgive)):
-                if cgive[i][1] == snake[0][0]:
-                    snake.insert(0, cgive.pop(i))
-                    flag2 = True
-                    break
-                elif cgive[i][0] == snake[0][0]:
-                    cgive[i][0], cgive[i][1] = cgive[i][1], cgive[i][0]
-                    snake.insert(0, cgive.pop(i))
-                    flag2 = True
-                    break
-            if not flag2:
-                cgive.append(stock.pop())
-
-def turn():
-    global start
-    if start:
-        print("""Status: It's your turn to make a move. Enter your command""")
-        start -= 1
-        player_d()
-    else:
-        print('Status: Computer is about to make a move. Press Enter to continue')
-        start += 1
-        computer_d()
-
-full = [[i, j] for i in range(7) for j in range(i, 7)]
-stock, pgive, cgive, snake, start = give(full)
-game()
+            print("Status: Computer WIN!✔✔✔")
+            B = False
+    except TypeError:
+        error = ("Invalid input or wrong pieces")
+    except Exception:
+        error = ("Computer must move, Press Enter")
+    except IndexError:
+        error = ("Invalid input, number > pieces")
