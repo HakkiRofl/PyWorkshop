@@ -9,6 +9,7 @@ player_pieces = []
 A = True
 Status = "none"
 start_domino = [0, 0]
+level = int(input("Easy - 1, Medium - 2, Hard - 3  : "))
 while A:
     random.shuffle(library_pieces)
     stock_pieces = library_pieces[0:14]
@@ -40,14 +41,43 @@ print(f"\nThe {Status} makes the first move (status = '{Status}')\n")
 table.append(start_domino)
 B = True
 error = ""
+active = 0
 while B:
+    bestvar = []
+    if level == 2:
+        if active == 1:
+            active = 0
+        elif active == 0:
+            active = 1
+    if level == 3 or active == 1:
+        text_list = pc_pieces + table
+        text1 = [i[0] for i in text_list]
+        text2 = [i[1] for i in text_list]
+        text_list = text1 + text2
+        from collections import defaultdict
+        freq_dict = defaultdict(int)
+        for word in text_list:
+            freq_dict[word] += 1
+        for i in pc_pieces:
+            bestvar.append(freq_dict[i[0]] + freq_dict[i[1]])
+        new_pc_pieces = []
+        for i in range(len(pc_pieces)):
+            g = 0
+            for h in range(len(pc_pieces)):
+                if bestvar[h] > g:
+                    g = bestvar[h]
+                    piec = h
+            new_pc_pieces.append(pc_pieces[piec])
+            pc_pieces.remove(pc_pieces[piec])
+            bestvar.remove(bestvar[piec])
+        pc_pieces = new_pc_pieces
     print("=" * 70)
     print(f"\nStock size: {len(stock_pieces)}")
     print(f"Computer pieces: {len(pc_pieces)} \n")
     if len(table) < 7:
         print(*table, "\n")
     elif len(table) >= 7:
-        print(*table[0:3],"...", *table[-4:-1], "\n")
+        print(*table[0:3],"...", *table[len(table) - 3:len(table)], "\n")
     for i, domino in enumerate(player_pieces, start=1):
         print(f"{i}:{domino}")
     if Status == "computer":
@@ -56,7 +86,6 @@ while B:
         print("\nStatus: It's your turn to make a move. Enter your command.")
     print(error)
     error = ""
-    print(pc_pieces)
     try:
         if len(player_pieces) > 0:
             move = int(input())
